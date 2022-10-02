@@ -5,9 +5,73 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>月鳳老師流袖山高計算機</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      font-family: "open sans", "Helvetica Neue", Helvetica,Arial, "Heiti TC", "Apple LiGothic Medium", "微軟正黑體", sans-serif;
+      color: #212529;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+    h1 {
+      text-align: center;
+    }
+    code {
+      background-color: #f9f2f4;
+      border-radius: 4px;
+      color: var(--color-error);
+      font-size: 90%;
+      padding: 2px 4px;
+      white-space: nowrap;
+      margin: 0 4px;
+      border: #e5e5e5 1px solid;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    input:not([type="radio"]):not([type="checkbox"]) {
+      width: 100%;
+      border-radius: 4px;
+      padding: 8px;
+      border: 1px #c9d1d5 solid;
+      color: #777;
+    }
+    .form__unit {
+      margin-bottom: 16px;
+    }
+    #calculate {
+      display: block;
+      width: 180px;
+      padding: 10px;
+      background: #075693;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 21px;
+      margin: 0 auto;
+    }
+    #calculate-result {
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+    #cap-height {
+      font-weight: bold;
+      font-size: 21px;
+    }
+  </style>
 </head>
 <body>
+<div class="container">
   <h1>月鳳老師流袖山高計算機</h1>
+  <p>單位使用 in 時可以輸入<code><strong>8 3/4</strong></code>來表示八又四分之三（注意中間有空格）。</p>
+  <p>目前只有三個輸入框都輸入正確的數值後按下「計算袖山高度」按鈕才會正常作用，尚未有任何防呆。</p>
   <div>
     <div class="form__unit">
       <label class="form__title">
@@ -59,6 +123,7 @@
     <button id="calculate">計算袖山高度</button>
     <div id="calculate-result">算出來的袖山高：<span id="cap-height"></span></div>
   </div>
+</div>
   <script>
     (function(){
       document.getElementById("calculate").addEventListener('click', e => {
@@ -104,7 +169,8 @@
         else {
           outputNum = capHeight.toFixed(1);
         }
-        document.getElementById("cap-height").innerHTML = outputNum;
+        document.getElementById("cap-height").innerHTML = `${outputNum} ${unit}`;
+        document.getElementById("calculate-result").style.display = "block";
       });
     })();
   </script>
