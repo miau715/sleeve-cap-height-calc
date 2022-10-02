@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>月鳳老師流袖山高計算機</title>
+</head>
+<body>
+  <h1>月鳳老師流袖山高計算機</h1>
+  <div>
+    <div class="form__unit">
+      <label class="form__title">
+        使用單位：
+      </label>
+      <div class="form__main">
+        <div class="form__input">
+          <div class="input-cr">
+            <input type="radio" name="unit-type" id="unit-in" value="in" checked />
+            <label for="unit-in">in</label>
+          </div>
+          <div class="input-cr">
+            <input type="radio" name="unit-type" id="unit-cm" value="cm" />
+            <label for="unit-cm">cm</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form__unit">
+      <label class="form__title">
+        前袖圈長度
+      </label>
+      <div class="form__main">
+        <div class="form__input">
+          <input type="text" id="front-cap-length" />
+        </div>
+      </div>
+    </div>
+    <div class="form__unit">
+      <label class="form__title">
+        後袖圈長度
+      </label>
+      <div class="form__main">
+        <div class="form__input">
+          <input type="text" id="back-cap-length" />
+        </div>
+      </div>
+    </div>
+    <div class="form__unit">
+      <label class="form__title">
+        預期袖山寬度
+      </label>
+      <div class="form__main">
+        <div class="form__input">
+          <input type="text" id="cap-width" />
+        </div>
+      </div>
+    </div>
+    <button id="calculate">計算袖山高度</button>
+    <div id="calculate-result">算出來的袖山高：<span id="cap-height"></span></div>
+  </div>
+  <script>
+    (function(){
+      document.getElementById("calculate").addEventListener('click', e => {
+        const unit = document.querySelector('input[name="unit-type"]:checked').value;
+        function inputToCm(input) {
+          let val = input.trimStart().trimEnd();
+          if (unit == "in") {
+            val = val.split(" ");
+            if (val[1] && val[1].includes("/")) {
+              let float = val[1].split("/");
+              val = parseFloat(val[0]) + parseInt(float[0]) / parseInt(float[1]);
+            }
+            val = val * 2.54;
+          }
+          else {
+            val = parseFloat(val);
+          }
+          return val;
+        }
+        const frontCapLength = inputToCm(document.getElementById("front-cap-length").value);
+        const backCapLength = inputToCm(document.getElementById("back-cap-length").value);
+        const capWidth = inputToCm(document.getElementById("cap-width").value);
+        const biggerCapLength = frontCapLength - backCapLength >= 0 ? frontCapLength : backCapLength;
+        const smallerCapLength = frontCapLength - backCapLength >= 0 ? backCapLength : frontCapLength;
+        const biggerSideCapWidth = (biggerCapLength * biggerCapLength - smallerCapLength * smallerCapLength + capWidth * capWidth) / (capWidth * 2);
+        console.log(biggerSideCapWidth);
+        const capHeight = Math.sqrt(biggerCapLength * biggerCapLength - biggerSideCapWidth * biggerSideCapWidth);
+        let outputNum;
+        if (unit == "in") {
+          const int = parseInt(capHeight / 2.540);
+          let numerator = Math.round((capHeight / 2.540 - int) * 16);
+          let denominator = 16;
+          let fraction;
+          if (numerator != 0) {
+            while (numerator % 2 == 0) {
+              numerator = numerator / 2;
+              denominator = denominator / 2;
+            }
+            fraction = ` ${numerator}/${denominator}`
+          }
+          outputNum = `${int}${fraction}`
+        }
+        else {
+          outputNum = capHeight.toFixed(1);
+        }
+        document.getElementById("cap-height").innerHTML = outputNum;
+      });
+    })();
+  </script>
+</body>
+</html>
